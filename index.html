@@ -1,9 +1,74 @@
 <!DOCTYPE html>
-<div id="container"></div>
-<script type="module">
+<meta charset="utf-8" />
 
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v7.js"></script>
 
-console.log(d3);
+<div id="my_dataviz"></div>
 
+<script>
+  // generates 10 random values
+  // use this as the base data I am assuming
+  const randomValues = Array.from({ length: 10 }, () =>
+    Math.floor(Math.random() * 101)
+  );
+
+  // console.log to do sanity check
+  console.log(randomValues);
+
+  // set the dimensions and margins of the graph
+  const margin = { top: 70, right: 50, bottom: 50, left: 60 },
+    width = 900 - margin.left - margin.right,
+    height = 900 - margin.top - margin.bottom;
+
+  // set bar size
+  const barSize = 900 / 10;
+
+  // making x scale
+
+  const xScale = d3
+    .scaleBand()
+    .domain(d3.range(randomValues.length)) // Use indices as categories
+    .range([0, 780])
+    .padding(0.1);
+
+  // making y scale
+  const yScale = d3
+    .scaleLinear()
+    .domain([0, 100]) // Use indices as categories
+    .range([780, 0]);
+
+  // append the svg
+  const svg = d3
+    .select("#my_dataviz")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+  // append x axis
+  svg
+    .append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(xScale))
+    .selectAll("text")
+    .attr("transform", "translate(-10,0)rotate(-45)")
+    .style("text-anchor", "end");
+
+  // append y axis
+  svg.append("g").call(d3.axisLeft(yScale).tickFormat("")); // tickFormat removes the label on the y axis
+
+  // Create the bars with no color nad only lines
+  svg
+    .selectAll("mybar")
+    .data(randomValues)
+    .enter()
+    .append("rect")
+    .attr("x", (d, i) => xScale(i))
+    .attr("y", (d) => yScale(d))
+    .attr("width", xScale.bandwidth())
+    .attr("height", (d) => height - yScale(d))
+    .attr("stroke", "black")
+    .attr("fill", "none");
 </script>
