@@ -4,71 +4,229 @@
 <!-- Load d3.js -->
 <script src="https://d3js.org/d3.v7.js"></script>
 
-<div id="my_dataviz"></div>
+<div id="my_dataviz"></div> <!-- overarching structure-->
 
 <script>
+
+
   // generates 10 random values
   // use this as the base data I am assuming
-  const randomValues = Array.from({ length: 10 }, () =>
+  const problem1Values = Array.from({ length: 10 }, () =>
     Math.floor(Math.random() * 101)
   );
 
+  const problem2Values = Array.from({ length: 10 }, () =>
+    Math.floor(Math.random() * 101)
+  );
+
+  let currentIndex = 0;
+  let maxIndex = 2; //change as further slides are created
+
+
+
+
+
   // console.log to do sanity check
-  console.log(randomValues);
+  console.log(problem1Values);
+  console.log(problem2Values);
+
+
+  const graphSize = 900;
 
   // set the dimensions and margins of the graph
   const margin = { top: 70, right: 50, bottom: 50, left: 60 },
-    width = 900 - margin.left - margin.right,
-    height = 900 - margin.top - margin.bottom;
+    width = graphSize - margin.left - margin.right,
+    height = graphSize - margin.top - margin.bottom;
 
-  // set bar size
-  const barSize = 900 / 10;
 
-  // making x scale
 
-  const xScale = d3
-    .scaleBand()
-    .domain(d3.range(randomValues.length)) // Use indices as categories
-    .range([0, 780])
-    .padding(0.1);
-
-  // making y scale
-  const yScale = d3
-    .scaleLinear()
-    .domain([0, 100]) // Use indices as categories
-    .range([780, 0]);
 
   // append the svg
-  const svg = d3
+  let graph = d3
     .select("#my_dataviz")
+    .append("svg")
+    .attr("id", "graph_svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+
+
+  renderSlide(); //makes the first slide appear
+
+
+
+  function graphOne() {
+
+    graph = d3.select("#graph_svg");
+
+
+
+    // set bar size
+    const barSize = graphSize / 10;
+    // making x scale
+    const xScale = d3
+      .scaleBand()
+      .domain(d3.range(problem1Values.length)) // Use indices as categories
+      .range([0, 780])
+      .padding(0.1);
+
+    // making y scale
+    const yScale = d3
+      .scaleLinear()
+      .domain([0, 100]) // Use indices as categories
+      .range([780, 0]);
+
+    // append x axis
+    graph
+      .append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(xScale))
+      .selectAll("text")
+      .attr("transform", "translate(-10,0)rotate(-45)")
+      .style("text-anchor", "end");
+
+    // append y axis
+    graph.append("g").call(d3.axisLeft(yScale).tickFormat("")); // tickFormat removes the label on the y axis
+
+    // Create the bars with no color and only lines
+    graph
+      .selectAll("mybar")
+      .data(problem1Values)
+      .enter()
+      .append("rect")
+      .attr("x", (d, i) => xScale(i))
+      .attr("y", (d) => yScale(d))
+      .attr("width", xScale.bandwidth())
+      .attr("height", (d) => height - yScale(d))
+      .attr("stroke", "black")
+      .attr("fill", "none");
+
+  }
+
+  function graphTwo() { //REPLACE THIS AND DUPLICATE
+    console.log("hola");
+
+    graph = d3.select("#graph_svg");
+    // set bar size
+    const barSize = graphSize / 10;
+    // making x scale
+    const xScale = d3
+      .scaleBand()
+      .domain(d3.range(problem2Values.length)) // Use indices as categories
+      .range([0, 780])
+      .padding(0.1);
+
+    // making y scale
+    const yScale = d3
+      .scaleLinear()
+      .domain([0, 100]) // Use indices as categories
+      .range([780, 0]);
+
+    // append x axis
+    graph
+      .append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(xScale))
+      .selectAll("text")
+      .attr("transform", "translate(-10,0)rotate(-45)")
+      .style("text-anchor", "end");
+
+    // append y axis
+    graph.append("g").call(d3.axisLeft(yScale).tickFormat("")); // tickFormat removes the label on the y axis
+
+    // Create the bars with no color and only lines
+    graph
+      .selectAll("mybar")
+      .data(problem2Values)
+      .enter()
+      .append("rect")
+      .attr("x", (d, i) => xScale(i))
+      .attr("y", (d) => yScale(d))
+      .attr("width", xScale.bandwidth())
+      .attr("height", (d) => height - yScale(d))
+      .attr("stroke", "black")
+      .attr("fill", "none");
+
+  }
+
+
+
+  //UI
+  function renderSlide() {
+    const myDataVizDiv = d3.select("#graph_svg");
+
+    myDataVizDiv.selectAll("*").remove();
+    if (currentIndex == 0) {
+      graphOne();
+
+    } else if (currentIndex == 1) {
+      graphTwo();
+
+    }
+  }
+
+  // Button data with positions
+  const buttonData = [
+    { id: "prevBtn", text: "Previous", x: 20, y: 30 },
+    { id: "nextBtn", text: "Next", x: 180, y: 30 }
+  ];
+
+  // Create a separate SVG for buttons
+  const buttonSvg = d3.select("#my_dataviz")
     .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-  // append x axis
-  svg
-    .append("g")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(xScale))
-    .selectAll("text")
-    .attr("transform", "translate(-10,0)rotate(-45)")
-    .style("text-anchor", "end");
-
-  // append y axis
-  svg.append("g").call(d3.axisLeft(yScale).tickFormat("")); // tickFormat removes the label on the y axis
-
-  // Create the bars with no color nad only lines
-  svg
-    .selectAll("mybar")
-    .data(randomValues)
+  // Append buttons to the SVG
+  const buttons = buttonSvg.selectAll("g")  // Change "rect" to "g" to group rect and text
+    .data(buttonData)
     .enter()
-    .append("rect")
-    .attr("x", (d, i) => xScale(i))
-    .attr("y", (d) => yScale(d))
-    .attr("width", xScale.bandwidth())
-    .attr("height", (d) => height - yScale(d))
-    .attr("stroke", "black")
-    .attr("fill", "none");
+    .append("g") // Create a group for each button
+    .attr("id", d => d.id)
+    .attr("transform", d => `translate(${d.x}, ${d.y})`);  // Translate the group to button position
+
+  // Append rectangles to the group
+  buttons.append("rect")
+    .attr("width", 80)
+    .attr("height", 40)
+    .attr("fill", "lightblue")
+    .attr("stroke", "blue");
+
+  // Add text to buttons
+  buttons.append("text")
+    .attr("x", 40)  // Center the text within the button
+    .attr("y", 25)  // Center the text vertically
+    .attr("text-anchor", "middle")
+    .attr("fill", "black")
+    .style("cursor", "default") // Set cursor style to "default"
+    .text(d => d.text);
+
+
+  buttonSvg.select("#nextBtn").on("click", () => {
+
+    if (currentIndex < maxIndex - 1) {
+      currentIndex++;
+      console.log(currentIndex);
+      renderSlide();
+    }
+
+
+
+  });
+
+  buttonSvg.select("#prevBtn").on("click", () => {
+    if (currentIndex > 0) {
+      currentIndex--;
+      console.log(currentIndex);
+      renderSlide();
+    }
+
+
+  });
+
+
 </script>
