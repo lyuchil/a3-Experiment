@@ -1,232 +1,70 @@
 <!DOCTYPE html>
-<meta charset="utf-8" />
+<html lang="en">
 
-<!-- Load d3.js -->
-<script src="https://d3js.org/d3.v7.js"></script>
+<head>
+  <meta charset="UTF-8">
+  <title>Assignment 3</title>
+  <script src="https://d3js.org/d3.v7.js"></script>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
 
-<div id="my_dataviz"></div> <!-- overarching structure-->
-
+<body>
+  <nav>
+    <h1>Assignment 3</h1>
+  </nav>
+  <div class="welcomePageContainer" id="welcomeScreen">
+    <p class="welcomeTextBox">Welcome to this quiz! You will be shown different graphs with two different
+      dots on them. Your job is to identify what percent the <b>smaller graph</b> is of the <b>larger one</b>.
+      There are a total of 5 questions. Good luck! 🫡</p>
+    <button id="okBtn">Start</button>
+  </div>
+  <div class="iframe-container hidden">
+    <iframe id="datavizFrame" src="DataVis1.html" style="width:510px; height:510px;"></iframe>
+  </div>
+  <div class="button-container hidden">
+    <button id="prevBtn">Previous</button>
+    <button id="nextBtn">Next</button>
+  </div>
+</body>
 <script>
-
-
-  // generates 10 random values
-  // use this as the base data I am assuming
-  const problem1Values = Array.from({ length: 10 }, () =>
-    Math.floor(Math.random() * 101)
-  );
-
-  const problem2Values = Array.from({ length: 10 }, () =>
-    Math.floor(Math.random() * 101)
-  );
-
   let currentIndex = 0;
-  let maxIndex = 2; //change as further slides are created
+  const maxIndex = 4; // Change as further slides are created
 
-
-
-
-
-  // console.log to do sanity check
-  console.log(problem1Values);
-  console.log(problem2Values);
-
-
-  const graphSize = 900;
-
-  // set the dimensions and margins of the graph
-  const margin = { top: 70, right: 50, bottom: 50, left: 60 },
-    width = graphSize - margin.left - margin.right,
-    height = graphSize - margin.top - margin.bottom;
-
-
-
-
-  // append the svg
-  let graph = d3
-    .select("#my_dataviz")
-    .append("svg")
-    .attr("id", "graph_svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", `translate(${margin.left}, ${margin.top})`);
-
-
-
-  renderSlide(); //makes the first slide appear
-
-
-
-  function graphOne() {
-
-    graph = d3.select("#graph_svg");
-
-
-
-    // set bar size
-    const barSize = graphSize / 10;
-    // making x scale
-    const xScale = d3
-      .scaleBand()
-      .domain(d3.range(problem1Values.length)) // Use indices as categories
-      .range([0, 780])
-      .padding(0.1);
-
-    // making y scale
-    const yScale = d3
-      .scaleLinear()
-      .domain([0, 100]) // Use indices as categories
-      .range([780, 0]);
-
-    // append x axis
-    graph
-      .append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(xScale))
-      .selectAll("text")
-      .attr("transform", "translate(-10,0)rotate(-45)")
-      .style("text-anchor", "end");
-
-    // append y axis
-    graph.append("g").call(d3.axisLeft(yScale).tickFormat("")); // tickFormat removes the label on the y axis
-
-    // Create the bars with no color and only lines
-    graph
-      .selectAll("mybar")
-      .data(problem1Values)
-      .enter()
-      .append("rect")
-      .attr("x", (d, i) => xScale(i))
-      .attr("y", (d) => yScale(d))
-      .attr("width", xScale.bandwidth())
-      .attr("height", (d) => height - yScale(d))
-      .attr("stroke", "black")
-      .attr("fill", "none");
-
-  }
-
-  function graphTwo() { //REPLACE THIS AND DUPLICATE
-    console.log("hola");
-
-    graph = d3.select("#graph_svg");
-    // set bar size
-    const barSize = graphSize / 10;
-    // making x scale
-    const xScale = d3
-      .scaleBand()
-      .domain(d3.range(problem2Values.length)) // Use indices as categories
-      .range([0, 780])
-      .padding(0.1);
-
-    // making y scale
-    const yScale = d3
-      .scaleLinear()
-      .domain([0, 100]) // Use indices as categories
-      .range([780, 0]);
-
-    // append x axis
-    graph
-      .append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(xScale))
-      .selectAll("text")
-      .attr("transform", "translate(-10,0)rotate(-45)")
-      .style("text-anchor", "end");
-
-    // append y axis
-    graph.append("g").call(d3.axisLeft(yScale).tickFormat("")); // tickFormat removes the label on the y axis
-
-    // Create the bars with no color and only lines
-    graph
-      .selectAll("mybar")
-      .data(problem2Values)
-      .enter()
-      .append("rect")
-      .attr("x", (d, i) => xScale(i))
-      .attr("y", (d) => yScale(d))
-      .attr("width", xScale.bandwidth())
-      .attr("height", (d) => height - yScale(d))
-      .attr("stroke", "black")
-      .attr("fill", "none");
-
-  }
-
-
-
-  //UI
   function renderSlide() {
-    const myDataVizDiv = d3.select("#graph_svg");
-
-    myDataVizDiv.selectAll("*").remove();
-    if (currentIndex == 0) {
-      graphOne();
-
-    } else if (currentIndex == 1) {
-      graphTwo();
-
+    if (currentIndex === 0) {
+      document.getElementById("datavizFrame").src = "DataVis1.html";
+    } else if (currentIndex === 1) {
+      document.getElementById("datavizFrame").src = "DataVis2.html";
+    } else if (currentIndex === 2) {
+      document.getElementById("datavizFrame").src = "DataVis3.html";
+    } else if (currentIndex === 3) {
+      document.getElementById("datavizFrame").src = "DataVis4.html";
     }
   }
 
-  // Button data with positions
-  const buttonData = [
-    { id: "prevBtn", text: "Previous", x: 20, y: 30 },
-    { id: "nextBtn", text: "Next", x: 180, y: 30 }
-  ];
-
-  // Create a separate SVG for buttons
-  const buttonSvg = d3.select("#my_dataviz")
-    .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", `translate(${margin.left}, ${margin.top})`);
-
-  // Append buttons to the SVG
-  const buttons = buttonSvg.selectAll("g")  // Change "rect" to "g" to group rect and text
-    .data(buttonData)
-    .enter()
-    .append("g") // Create a group for each button
-    .attr("id", d => d.id)
-    .attr("transform", d => `translate(${d.x}, ${d.y})`);  // Translate the group to button position
-
-  // Append rectangles to the group
-  buttons.append("rect")
-    .attr("width", 80)
-    .attr("height", 40)
-    .attr("fill", "lightblue")
-    .attr("stroke", "blue");
-
-  // Add text to buttons
-  buttons.append("text")
-    .attr("x", 40)  // Center the text within the button
-    .attr("y", 25)  // Center the text vertically
-    .attr("text-anchor", "middle")
-    .attr("fill", "black")
-    .style("cursor", "default") // Set cursor style to "default"
-    .text(d => d.text);
-
-
-  buttonSvg.select("#nextBtn").on("click", () => {
-
+  document.getElementById("nextBtn").addEventListener("click", () => {
     if (currentIndex < maxIndex - 1) {
       currentIndex++;
-      console.log(currentIndex);
       renderSlide();
     }
-
-
-
   });
 
-  buttonSvg.select("#prevBtn").on("click", () => {
+  document.getElementById("prevBtn").addEventListener("click", () => {
     if (currentIndex > 0) {
       currentIndex--;
-      console.log(currentIndex);
       renderSlide();
     }
-
-
   });
 
+  document.getElementById("okBtn").addEventListener("click", () => {
+    document.getElementById("welcomeScreen").style.display = "none"; // Hide welcome screen
+    document.querySelector(".iframe-container").classList.remove("hidden"); // Show iframe
+    document.querySelector(".button-container").classList.remove("hidden"); // Show buttons
+  });
 
+  // Initial rendering
+  renderSlide();
 </script>
+
+</html>
