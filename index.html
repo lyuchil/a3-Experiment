@@ -52,25 +52,42 @@
 
   let guessedValueArray = [];
   let correctValueArray = [];
+  let graphType = [];
+
+  let numbers = [0, 1, 2, 3, 4];
+
+  // Function to shuffle the array randomly
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
+
+  // Shuffle the array
+  shuffleArray(numbers);
+
+  console.log(numbers);
 
   function renderSlide() {
 
     const myDataVizDiv = d3.select("#visualization-container");
 
     myDataVizDiv.selectAll("*").remove();
-    if (currentIndex === 0) {
-
+    if (numbers[currentIndex] === 0) {
+      graphType.push("VerticalBar");
       correctValueArray.push(graphOne());
-
-      //document.getElementById("datavizFrame").src = "DataVis1.html";
-    } else if (currentIndex === 1) {
-
+    } else if (numbers[currentIndex] === 1) {
+      graphType.push("HorizontalBar");
       correctValueArray.push(graphTwo());
-    } else if (currentIndex === 2) {
+    } else if (numbers[currentIndex] === 2) {
+      graphType.push("Line");
       correctValueArray.push(graphThree());
-    } else if (currentIndex === 3) {
+    } else if (numbers[currentIndex] === 3) {
+      graphType.push("Pie");
       correctValueArray.push(graphFour());
-    } else if (currentIndex === 4) {
+    } else if (numbers[currentIndex] === 4) {
+      graphType.push("TreeMap");
       correctValueArray.push(graphFive());
     }
   }
@@ -79,6 +96,7 @@
     if (checkInput(inputValue) && currentIndex < maxIndex - 1) {
 
       guessedValueArray.push(inputValue);
+      console.log(graphType);
       console.log(guessedValueArray);
       console.log(correctValueArray);
 
