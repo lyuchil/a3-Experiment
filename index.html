@@ -1,111 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Assignment 3</title>
+    <script src="https://d3js.org/d3.v7.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <title>Assignment 3</title>
-  <script src="https://d3js.org/d3.v7.js"></script>
-  <link rel="stylesheet" href="styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-</head>
+  <body>
+    <nav>
+      <h1>Assignment 3</h1>
+    </nav>
+    <div class="welcomePageContainer" id="welcomeScreen">
+      <p class="welcomeTextBox">
+        Welcome to this quiz! You will be shown different graphs with two
+        different dots on them. Your job is to identify what percent the
+        <b>smaller graph</b> is of the <b>larger one</b>. There are a total of 5
+        questions. Good luck! 🫡
+      </p>
+      <button id="okBtn">Start</button>
+    </div>
+    <div class="iframe-container hidden">
+      <iframe
+        id="datavizFrame"
+        src="DataVis1.html"
+        style="width: 510px; height: 510px"
+      ></iframe>
+    </div>
 
-<body>
-  <nav>
-    <h1>Assignment 3</h1>
-  </nav>
-  <div class="welcomePageContainer" id="welcomeScreen">
-    <p class="welcomeTextBox">Welcome to this quiz! You will be shown different graphs with two different
-      dots on them. Your job is to identify what percent the <b>smaller graph</b> is of the <b>larger one</b>.
-      There are a total of 5 questions. Good luck! 🫡</p>
-    <button id="okBtn">Start</button>
-  </div>
-  <div class="iframe-container hidden">
-    <iframe id="datavizFrame" src="DataVis1.html" style="width:510px; height:510px;"></iframe>
-  </div>
+    <div class="button-container hidden">
+      <b1> What percent is the smaller of the larger?</b1>
+      <br />
+      <br />
+      <input type="text" id="textEntryBox" placeholder="" value="" />
+      <b1>%</b1>
+      <!-- <button id="prevBtn">Previous</button> -->
+      <button id="nextBtn">Next</button>
+      <br />
+      <br />
+      <b1 id="inputWarning">Value must be an integer between 1 and 100.</b1>
+    </div>
+  </body>
+  <script>
+    let currentIndex = 0;
+    const maxIndex = 5; // Change as further slides are created
 
-  <div class="button-container hidden">
-    <b1> What percent is the smaller of the larger?</b1>
-    <br>
-    <br>
-    <input type="text" id="textEntryBox" placeholder="" value="">
-    <b1>%</b1>
-    <!-- <button id="prevBtn">Previous</button> -->
-    <button id="nextBtn">Next</button>
-    <br>
-    <br>
-    <b1 id="inputWarning">Value must be an integer between 1 and 100.</b1>
-  </div>
-</body>
-<script>
-  let currentIndex = 0;
-  const maxIndex = 5; // Change as further slides are created
-
-  function renderSlide() {
-    if (currentIndex === 0) {
-      document.getElementById("datavizFrame").src = "DataVis1.html";
-    } else if (currentIndex === 1) {
-      document.getElementById("datavizFrame").src = "DataVis2.html";
-    } else if (currentIndex === 2) {
-      document.getElementById("datavizFrame").src = "DataVis3.html";
-    } else if (currentIndex === 3) {
-      document.getElementById("datavizFrame").src = "DataVis4.html";
+    function renderSlide() {
+      if (currentIndex === 0) {
+        document.getElementById("datavizFrame").src = "DataVis1.html";
+      } else if (currentIndex === 1) {
+        document.getElementById("datavizFrame").src = "DataVis2.html";
+      } else if (currentIndex === 2) {
+        document.getElementById("datavizFrame").src = "DataVis3.html";
+      } else if (currentIndex === 3) {
+        document.getElementById("datavizFrame").src = "DataVis4.html";
+      } else if (currentIndex === 4) {
+        document.getElementById("datavizFrame").src = "DataVis5.html";
+      }
     }
-  }
 
-  document.getElementById("nextBtn").addEventListener("click", () => {
-    if (checkInput(inputValue) && currentIndex < maxIndex - 1) {
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      if (checkInput(inputValue) && currentIndex < maxIndex - 1) {
+        valueArray.push(inputValue);
+        console.log(valueArray);
 
-      valueArray.push(inputValue);
-      console.log(valueArray);
+        currentIndex++;
+        renderSlide();
+        resetTextBox();
+        d3.select("#inputWarning").style("display", "none");
+      } else {
+        d3.select("#inputWarning").style("display", "block");
+      }
+    });
 
-      currentIndex++;
-      renderSlide();
-      resetTextBox();
-      d3.select("#inputWarning").style("display", "none");
-    } else {
-      d3.select("#inputWarning").style("display", "block");
+    // document.getElementById("prevBtn").addEventListener("click", () => {
+    //   if (currentIndex > 0) {
+    //     currentIndex--;
+    //     renderSlide();
+    //   }
+    // });
+
+    let inputValue = "";
+
+    let valueArray = [];
+
+    // Function to perform error checking
+    function checkInput(input) {
+      const value = parseInt(input);
+      if (isNaN(value) || value < 1 || value > 100) {
+        return false;
+      }
+      return true;
     }
-  });
 
-  // document.getElementById("prevBtn").addEventListener("click", () => {
-  //   if (currentIndex > 0) {
-  //     currentIndex--;
-  //     renderSlide();
-  //   }
-  // });
+    d3.select("#textEntryBox").on("input", function () {
+      inputValue = +this.value;
+    });
 
-  let inputValue = ""
-
-  let valueArray = [];
-
-  // Function to perform error checking
-  function checkInput(input) {
-    const value = parseInt(input);
-    if (isNaN(value) || value < 1 || value > 100) {
-      return false;
+    function resetTextBox() {
+      d3.select("#textEntryBox").property("value", "");
+      inputValue = "";
     }
-    return true;
-  }
 
-  d3.select("#textEntryBox").on("input", function () {
-    inputValue = +this.value;
-  });
+    document.getElementById("okBtn").addEventListener("click", () => {
+      document.getElementById("welcomeScreen").style.display = "none"; // Hide welcome screen
+      document.querySelector(".iframe-container").classList.remove("hidden"); // Show iframe
+      document.querySelector(".button-container").classList.remove("hidden"); // Show buttons
 
-  function resetTextBox() {
-    d3.select("#textEntryBox").property("value", "");
-    inputValue = ""
-  }
+      d3.select("#textEntryBox").node().value = "";
+    });
 
-  document.getElementById("okBtn").addEventListener("click", () => {
-    document.getElementById("welcomeScreen").style.display = "none"; // Hide welcome screen
-    document.querySelector(".iframe-container").classList.remove("hidden"); // Show iframe
-    document.querySelector(".button-container").classList.remove("hidden"); // Show buttons
-
-    d3.select("#textEntryBox").node().value = "";
-  });
-
-  // Initial rendering
-  renderSlide();
-</script>
-
+    // Initial rendering
+    renderSlide();
+  </script>
 </html>

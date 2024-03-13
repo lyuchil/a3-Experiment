@@ -12,10 +12,11 @@
 
 <script>
   // Generates 10 random values
-  const problem2Values = Array.from({ length: 10 }, () =>
+  var problem1Values = Array.from({ length: 10 }, () =>
     Math.floor(Math.random() * 101)
   );
 
+  // randomly select the index and make sure they are not the same
   const indexOne = d3.randomInt(0, 9)();
 
   let indexTwo;
@@ -46,7 +47,8 @@
     width = graphSize - margin.left - margin.right,
     height = graphSize - margin.top - margin.bottom;
 
-  function graphTwo() {
+  // Function to draw the graph
+  function graphOne() {
     let svg = d3
       .select("#my_dataviz")
       .append("svg")
@@ -55,47 +57,46 @@
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    const customTicks = [0, 100];
-    const xScale = d3.scaleLinear().domain([0, 100]).range([0, width]);
+    const treemap = d3.treemap().size([width, height]).padding(2);
 
-    const yScale = d3
-      .scaleBand()
-      .domain(d3.range(problem2Values.length))
-      .range([0, height])
-      .padding(0.1);
+    const root = d3.hierarchy({
+      children: problem1Values.map((value, index) => ({ id: index, value })),
+    });
 
-    // Append x axis
-    svg
-      .append("g")
-      .attr("transform", `translate(0,${height})`)
-      .call(d3.axisBottom(xScale).tickValues(customTicks));
+    root.sum((d) => d.value);
 
-    // Append y axis
-    svg.append("g").call(d3.axisLeft(yScale));
+    console.log(root);
 
-    // Create bars
-    svg
-      .selectAll(".bar")
-      .data(problem2Values)
+    treemap(root);
+
+    var cell = svg
+      .selectAll("g")
+      .data(root.leaves())
       .enter()
+      .append("g")
+      .attr("transform", function (d) {
+        return "translate(" + d.x0 + "," + d.y0 + ")";
+      });
+
+    cell
       .append("rect")
-      .attr("class", "bar")
-      .attr("x", 0)
-      .attr("y", (d, i) => yScale(i))
-      .attr("width", (d) => xScale(d))
-      .attr("height", yScale.bandwidth())
-      .attr("fill", function (d, i) {
-        if (i === indexOne || i === actualIndexTwo) {
-          // highliting the bars given the index
-          return "red";
-        } else {
-          return "#FFFFFF";
-        }
+      .attr("width", function (d) {
+        return d.x1 - d.x0;
       })
-      .attr("stroke", "black")
-      .attr("stroke-width", 1);
+      .attr("height", function (d) {
+        return d.y1 - d.y0;
+      })
+      .style("stroke", "black")
+      .style("fill", (d, i) => {
+        // Color cells based on their index
+        if (i === indexOne || i === actualIndexTwo) {
+          return "red"; // Color cells at index 0 and 1 blue
+        } else {
+          return "white"; // Color all other cells green
+        }
+      });
   }
 
-  // Call graphTwo when the document is loaded
-  document.addEventListener("DOMContentLoaded", graphTwo);
+  // Call graphOne when the document is loaded
+  document.addEventListener("DOMContentLoaded", graphOne);
 </script>
