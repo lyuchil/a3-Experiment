@@ -22,6 +22,20 @@ function graphThree() {
     const indices = [indexOne, indexTwo];
     console.log(problem1Values[indexOne].x);
 
+    function correct_percentage(indexOne, actualIndexTwo) {
+        if (problem1Values[indexOne] > problem1Values[actualIndexTwo]) {
+            return Math.floor(
+                (problem1Values[actualIndexTwo] / problem1Values[indexOne]) * 100
+            );
+        } else if (problem1Values[actualIndexTwo] > problem1Values[indexOne]) {
+            return Math.floor(
+                (problem1Values[indexOne] / problem1Values[actualIndexTwo]) * 100
+            );
+        } else {
+            return (problem1Values[indexOne] / problem1Values[actualIndexTwo]) * 100;
+        }
+    }
+
     // Define graph size and margins
     const graphSize = 500;
     const margin = { top: 20, right: 10, bottom: 30, left: 40 },
@@ -81,5 +95,8 @@ function graphThree() {
         .attr("cy", (d) => yScale(problem1Values[d].y)) // Y-coordinate based on value at specified index
         .attr("r", 5)
         .attr("fill", "red");
+
+
+    return correct_percentage(indexOne, actualIndexTwo);
 }
 

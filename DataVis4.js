@@ -19,6 +19,20 @@ function graphFour() {
 
     const actualIndexTwo = indexTwo;
 
+    function correct_percentage(indexOne, actualIndexTwo) {
+        if (problem1Values[indexOne] > problem1Values[actualIndexTwo]) {
+            return Math.floor(
+                (problem1Values[actualIndexTwo] / problem1Values[indexOne]) * 100
+            );
+        } else if (problem1Values[actualIndexTwo] > problem1Values[indexOne]) {
+            return Math.floor(
+                (problem1Values[indexOne] / problem1Values[actualIndexTwo]) * 100
+            );
+        } else {
+            return (problem1Values[indexOne] / problem1Values[actualIndexTwo]) * 100;
+        }
+    }
+
     // Define graph size and margins
     const graphSize = 500;
     const margin = { top: 30, right: 30, bottom: 30, left: 30 },
@@ -58,4 +72,6 @@ function graphFour() {
         })
         .attr("stroke", "black")
         .style("stroke-width", "2px");
+
+    return correct_percentage(indexOne, actualIndexTwo);
 }
