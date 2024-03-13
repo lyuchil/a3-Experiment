@@ -24,6 +24,9 @@
       There are a total of 5 questions. Good luck! 🫡</p>
     <button id="okBtn">Start</button>
   </div>
+  <div class="endingPageContainer" id="endingScreen">
+    <p class="endingTextBox">Goodbye! Thanks for taking this quiz!</p>
+  </div>
   <div class="iframe-container hidden">
     <div id="visualization-container"></div>
     <!-- <iframe id="datavizFrame" src="DataVis1.html" style="width:510px; height:510px;"></iframe> -->
@@ -46,7 +49,7 @@
 
 
   let currentIndex = 0;
-  const maxIndex = 8; // Change as further slides are created
+  const maxIndex = 5; // Change as further slides are created
 
   let inputValue = ""
 
@@ -93,7 +96,14 @@
   }
 
   document.getElementById("nextBtn").addEventListener("click", () => {
-    if (checkInput(inputValue) && currentIndex < maxIndex - 1) {
+
+    if (currentIndex === maxIndex - 1) {
+      document.getElementById("endingScreen").style.display = "block"; // Hide welcome screen
+      document.querySelector(".iframe-container").classList.add("hidden"); // Show iframe
+      document.querySelector(".button-container").classList.add("hidden"); // Show buttons
+    }
+
+    if (checkInput(inputValue)) {
 
       guessedValueArray.push(inputValue);
       console.log(graphType);
