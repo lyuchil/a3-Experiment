@@ -10,12 +10,12 @@ iframe {
 }
 
 .welcomePageContainer {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        margin-top: 14rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 14rem;
 }
 
 nav {
@@ -52,16 +52,26 @@ button {
     border-radius: .5rem;
     height: 2.5rem;
     width: 7rem;
-    background-color:rgb(190, 77, 77);
+    background-color: rgb(190, 77, 77);
     color: white;
     font-weight: 500;
     font-size: 1rem;
 }
 
 button:hover {
-    background-color:rgb(197, 84, 84)
+    background-color: rgb(197, 84, 84)
 }
 
 .hidden {
     display: none;
-  }
+}
+
+
+#textEntryBox {
+    width: 20px;
+}
+
+#inputWarning {
+    display: none;
+    color: red;
+}

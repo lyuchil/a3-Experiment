@@ -22,14 +22,23 @@
   <div class="iframe-container hidden">
     <iframe id="datavizFrame" src="DataVis1.html" style="width:510px; height:510px;"></iframe>
   </div>
+
   <div class="button-container hidden">
-    <button id="prevBtn">Previous</button>
-    <button id="nextBtn">Next</button>
+    <b1> What percent is the smaller of the larger?</b2>
+      <br>
+      <br>
+      <input type="text" id="textEntryBox" placeholder="" value="">
+      <b1>%</b1>
+      <!-- <button id="prevBtn">Previous</button> -->
+      <button id="nextBtn">Next</button>
+      <br>
+      <br>
+      <b1 id="inputWarning">Value must be an integer between 1 and 100.</b1>
   </div>
 </body>
 <script>
   let currentIndex = 0;
-  const maxIndex = 4; // Change as further slides are created
+  const maxIndex = 5; // Change as further slides are created
 
   function renderSlide() {
     if (currentIndex === 0) {
@@ -44,23 +53,55 @@
   }
 
   document.getElementById("nextBtn").addEventListener("click", () => {
-    if (currentIndex < maxIndex - 1) {
+    if (checkInput(inputValue) && currentIndex < maxIndex - 1) {
+
+      valueArray.push(inputValue);
+      console.log(valueArray);
+
       currentIndex++;
       renderSlide();
+      resetTextBox();
+      d3.select("#inputWarning").style("display", "none");
+    } else {
+      d3.select("#inputWarning").style("display", "block");
     }
   });
 
-  document.getElementById("prevBtn").addEventListener("click", () => {
-    if (currentIndex > 0) {
-      currentIndex--;
-      renderSlide();
+  // document.getElementById("prevBtn").addEventListener("click", () => {
+  //   if (currentIndex > 0) {
+  //     currentIndex--;
+  //     renderSlide();
+  //   }
+  // });
+
+  let inputValue = ""
+
+  let valueArray = [];
+
+  // Function to perform error checking
+  function checkInput(input) {
+    const value = parseInt(input);
+    if (isNaN(value) || value < 1 || value > 100) {
+      return false;
     }
+    return true;
+  }
+
+  d3.select("#textEntryBox").on("input", function () {
+    inputValue = +this.value;
   });
+
+  function resetTextBox() {
+    d3.select("#textEntryBox").property("value", "");
+    inputValue = ""
+  }
 
   document.getElementById("okBtn").addEventListener("click", () => {
     document.getElementById("welcomeScreen").style.display = "none"; // Hide welcome screen
     document.querySelector(".iframe-container").classList.remove("hidden"); // Show iframe
     document.querySelector(".button-container").classList.remove("hidden"); // Show buttons
+
+    d3.select("#textEntryBox").node().value = "";
   });
 
   // Initial rendering
