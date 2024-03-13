@@ -2,87 +2,93 @@
 <meta charset="utf-8" />
 
 <head>
-    <script src="https://d3js.org/d3.v7.js"></script>
-    <link rel="stylesheet" href="styles.css" />
+  <script src="https://d3js.org/d3.v7.js"></script>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
-    <div id="my_dataviz"></div>
+  <div id="my_dataviz"></div>
 </body>
 
 <script>
-    // Generates 10 random values
-    var problem1Values = Array.from({ length: 10 }, () =>
-        Math.floor(Math.random() * 101)
-    );
+  // Generates 10 random values
+  var problem1Values = Array.from({ length: 10 }, () =>
+    Math.floor(Math.random() * 101)
+  );
 
-    // randomly select the index and make sure they are not the same
-    const indexOne = d3.randomInt(0, 9)();
+  // randomly select the index and make sure they are not the same
+  const indexOne = d3.randomInt(0, 9)();
 
-    let indexTwo;
+  let indexTwo;
 
-    do {
-        indexTwo = d3.randomInt(0, 9)();
-    } while (indexTwo === indexOne);
+  do {
+    indexTwo = d3.randomInt(0, 9)();
+  } while (indexTwo === indexOne);
 
-    const actualIndexTwo = indexTwo;
+  const actualIndexTwo = indexTwo;
 
-    // Define graph size and margins
-    const graphSize = 500;
-    const margin = { top: 20, right: 10, bottom: 30, left: 40 },
-        width = graphSize - margin.left - margin.right,
-        height = graphSize - margin.top - margin.bottom;
+  // Define graph size and margins
+  const graphSize = 500;
+  const margin = { top: 20, right: 10, bottom: 30, left: 40 },
+    width = graphSize - margin.left - margin.right,
+    height = graphSize - margin.top - margin.bottom;
 
-    // Function to draw the graph
-    function graphOne() {
-        let svg = d3
-            .select("#my_dataviz")
-            .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", `translate(${margin.left},${margin.top})`);
+  // Function to draw the graph
+  function graphOne() {
+    let svg = d3
+      .select("#my_dataviz")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        const xScale = d3
-            .scaleBand()
-            .domain(d3.range(problem1Values.length))
-            .range([0, width])
-            .padding(0.1);
+    const xScale = d3
+      .scaleBand()
+      .domain(d3.range(problem1Values.length))
+      .range([0, width])
+      .padding(0.1);
 
-        const yScale = d3.scaleLinear().domain([0, 100]).range([height, 0]);
+    const yScale = d3.scaleLinear().domain([0, 100]).range([height, 0]);
+    // Append x axis
 
-        // Append x axis
-        svg
-            .append("g")
-            .attr("transform", `translate(0,${height})`)
-            .call(d3.axisBottom(xScale));
+    var customYTicks = [0, 100];
 
-        // Append y axis
-        svg.append("g").call(d3.axisLeft(yScale));
+    var yAxis = d3.axisLeft(yScale).tickValues(customYTicks);
 
-        // Create bars
-        svg
-            .selectAll(".bar")
-            .data(problem1Values)
-            .enter()
-            .append("rect")
-            .attr("class", "bar")
-            .attr("x", (d, i) => xScale(i))
-            .attr("y", (d) => yScale(d))
-            .attr("width", xScale.bandwidth())
-            .attr("height", (d) => height - yScale(d))
-            .attr("fill", function (d, i) {
-                if (i === indexOne || i === actualIndexTwo) {
-                    // highliting the bars given the index
-                    return "red";
-                } else {
-                    return "#FFFFFF";
-                }
-            })
-            .attr("stroke", "black")
-            .attr("stroke-width", 1);
-    }
+    svg
+      .append("g")
+      .attr("transform", `translate(0,${height})`)
+      .call(d3.axisBottom(xScale));
 
-    // Call graphOne when the document is loaded
-    document.addEventListener("DOMContentLoaded", graphOne);
+    // Append y axis
+    // svg.append("g").call(d3.axisLeft(yScale).tickFormat(""));
+
+    svg.append("g").attr("class", "y-axis").call(yAxis);
+
+    // Create bars
+    svg
+      .selectAll(".bar")
+      .data(problem1Values)
+      .enter()
+      .append("rect")
+      .attr("class", "bar")
+      .attr("x", (d, i) => xScale(i))
+      .attr("y", (d) => yScale(d))
+      .attr("width", xScale.bandwidth())
+      .attr("height", (d) => height - yScale(d))
+      .attr("fill", function (d, i) {
+        if (i === indexOne || i === actualIndexTwo) {
+          // highliting the bars given the index
+          return "red";
+        } else {
+          return "#FFFFFF";
+        }
+      })
+      .attr("stroke", "black")
+      .attr("stroke-width", 1);
+  }
+
+  // Call graphOne when the document is loaded
+  document.addEventListener("DOMContentLoaded", graphOne);
 </script>
