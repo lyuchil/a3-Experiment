@@ -3,7 +3,7 @@
 
 <head>
     <script src="https://d3js.org/d3.v7.js"></script>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
@@ -12,7 +12,20 @@
 
 <script>
     // Generates 10 random values
-    const problem1Values = Array.from({ length: 10 }, () => Math.floor(Math.random() * 101));
+    var problem1Values = Array.from({ length: 10 }, () =>
+        Math.floor(Math.random() * 101)
+    );
+
+    // randomly select the index and make sure they are not the same
+    const indexOne = d3.randomInt(0, 9)();
+
+    let indexTwo;
+
+    do {
+        indexTwo = d3.randomInt(0, 9)();
+    } while (indexTwo === indexOne);
+
+    const actualIndexTwo = indexTwo;
 
     // Define graph size and margins
     const graphSize = 500;
@@ -22,43 +35,52 @@
 
     // Function to draw the graph
     function graphOne() {
-        let svg = d3.select("#my_dataviz").append("svg")
+        let svg = d3
+            .select("#my_dataviz")
+            .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        const xScale = d3.scaleBand()
+        const xScale = d3
+            .scaleBand()
             .domain(d3.range(problem1Values.length))
             .range([0, width])
             .padding(0.1);
 
-        const yScale = d3.scaleLinear()
-            .domain([0, 100])
-            .range([height, 0]);
+        const yScale = d3.scaleLinear().domain([0, 100]).range([height, 0]);
 
         // Append x axis
-        svg.append("g")
+        svg
+            .append("g")
             .attr("transform", `translate(0,${height})`)
             .call(d3.axisBottom(xScale));
 
         // Append y axis
-        svg.append("g")
-            .call(d3.axisLeft(yScale));
+        svg.append("g").call(d3.axisLeft(yScale));
 
         // Create bars
-        svg.selectAll(".bar")
+        svg
+            .selectAll(".bar")
             .data(problem1Values)
-            .enter().append("rect")
+            .enter()
+            .append("rect")
             .attr("class", "bar")
             .attr("x", (d, i) => xScale(i))
-            .attr("y", d => yScale(d))
+            .attr("y", (d) => yScale(d))
             .attr("width", xScale.bandwidth())
-            .attr("height", d => height - yScale(d))
-            .attr("fill", "#FFFFFF")
+            .attr("height", (d) => height - yScale(d))
+            .attr("fill", function (d, i) {
+                if (i === indexOne || i === actualIndexTwo) {
+                    // highliting the bars given the index
+                    return "red";
+                } else {
+                    return "#FFFFFF";
+                }
+            })
             .attr("stroke", "black")
             .attr("stroke-width", 1);
-
     }
 
     // Call graphOne when the document is loaded
