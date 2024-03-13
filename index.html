@@ -20,7 +20,7 @@
   </nav>
   <div class="welcomePageContainer" id="welcomeScreen">
     <p class="welcomeTextBox">Welcome to this quiz! You will be shown different graphs with two different
-      dots on them. Your job is to identify what percent the <b>smaller graph</b> is of the <b>larger one</b>.
+      marks on them. Your job is to identify what percent the <b>smaller value</b> is of the <b>larger value</b>.
       There are a total of 5 questions. Good luck! 🫡</p>
     <button id="okBtn">Start</button>
   </div>
@@ -33,7 +33,7 @@
   </div>
 
   <div class="button-container hidden">
-    <b1> What percent is the smaller of the larger?</b1>
+    <b1> What percent of the larger value is the smaller value?</b1>
     <br>
     <br>
     <input type="text" id="textEntryBox" placeholder="" value="">
@@ -111,6 +111,37 @@
       console.log(correctValueArray);
 
       currentIndex++;
+      if (currentIndex == 5) {
+        const order = ['VerticalBar', 'HorizontalBar', 'Line', 'Pie', 'TreeMap'];
+
+        let tempGraphType = [];
+        let tempGuessedValueArray = [];
+        let tempCorrectValueArray = [];
+
+        order.forEach(type => {
+          const index = graphType.indexOf(type);
+          if (index !== -1) {
+            tempGraphType.push(graphType[index]);
+            tempGuessedValueArray.push(guessedValueArray[index]);
+            tempCorrectValueArray.push(correctValueArray[index]);
+          }
+        });
+
+        graphType = tempGraphType;
+        guessedValueArray = tempGuessedValueArray;
+        correctValueArray = tempCorrectValueArray;
+
+        fetch('http://127.0.0.1:3000/append-data', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ guessedValueArray, correctValueArray }),
+        })
+          .then(response => response.json())
+          .then(data => console.log(data))
+          .catch(error => console.error('Error:', error));
+      }
       renderSlide();
       resetTextBox();
       d3.select("#inputWarning").style("display", "none");

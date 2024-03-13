@@ -4,7 +4,7 @@ function graphTwo() {
 
     // Generates 10 random values
     const problem2Values = Array.from({ length: 10 }, () =>
-        Math.floor(Math.random() * 101)
+        Math.floor(Math.random() * 100) + 1
     );
 
     const indexOne = d3.randomInt(0, 9)();

@@ -2,7 +2,7 @@
 function graphThree() {
   const problem1Values = Array.from({ length: 10 }, (_, i) => ({
     x: i,
-    y: Math.floor(Math.random() * 101),
+    y: Math.floor(Math.random() * 100) + 1,
   }));
 
   const indexOne = d3.randomInt(0, 9)();
@@ -65,7 +65,9 @@ function graphThree() {
     .call(d3.axisBottom(xScale));
 
   // Append y axis
-  svg.append("g").call(d3.axisLeft(yScale));
+  svg.append("g")
+    .call(d3.axisLeft(yScale).tickFormat(""))
+    .selectAll("text").remove();
 
   // Line generator
   const line = d3

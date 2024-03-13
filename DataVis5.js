@@ -6,7 +6,7 @@ function graphFive() {
 
   // Generates 10 random values
   var problem1Values = Array.from({ length: 10 }, () =>
-    Math.floor(Math.random() * 101)
+    Math.floor(Math.random() * 100) + 1
   );
 
   // randomly select the index and make sure they are not the same
