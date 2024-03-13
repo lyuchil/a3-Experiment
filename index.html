@@ -5,7 +5,10 @@
   <meta charset="UTF-8">
   <title>Assignment 3</title>
   <script src="https://d3js.org/d3.v7.js"></script>
-  <script src="test.js"></script>
+  <script src="DataVis1.js"></script>
+  <script src="DataVis2.js"></script>
+  <script src="DataVis3.js"></script>
+  <script src="DataVis4.js"></script>
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
@@ -21,7 +24,8 @@
     <button id="okBtn">Start</button>
   </div>
   <div class="iframe-container hidden">
-    <iframe id="datavizFrame" src="DataVis1.html" style="width:510px; height:510px;"></iframe>
+    <div id="visualization-container"></div>
+    <!-- <iframe id="datavizFrame" src="DataVis1.html" style="width:510px; height:510px;"></iframe> -->
   </div>
 
   <div class="button-container hidden">
@@ -40,27 +44,40 @@
 <script>
 
 
-  console.log(problem1Values);
   let currentIndex = 0;
   const maxIndex = 5; // Change as further slides are created
 
+  let inputValue = ""
+
+  let guessedValueArray = [];
+  let correctValueArray = [];
+
   function renderSlide() {
+
+    const myDataVizDiv = d3.select("#visualization-container");
+
+    myDataVizDiv.selectAll("*").remove();
     if (currentIndex === 0) {
-      document.getElementById("datavizFrame").src = "DataVis1.html";
+
+      correctValueArray.push(graphOne());
+
+      //document.getElementById("datavizFrame").src = "DataVis1.html";
     } else if (currentIndex === 1) {
-      document.getElementById("datavizFrame").src = "DataVis2.html";
+
+      graphTwo();
     } else if (currentIndex === 2) {
-      document.getElementById("datavizFrame").src = "DataVis3.html";
+      graphThree();
     } else if (currentIndex === 3) {
-      document.getElementById("datavizFrame").src = "DataVis4.html";
+      graphFour();
     }
   }
 
   document.getElementById("nextBtn").addEventListener("click", () => {
     if (checkInput(inputValue) && currentIndex < maxIndex - 1) {
 
-      valueArray.push(inputValue);
-      console.log(valueArray);
+      guessedValueArray.push(inputValue);
+      console.log(guessedValueArray);
+      console.log(correctValueArray);
 
       currentIndex++;
       renderSlide();
@@ -78,9 +95,6 @@
   //   }
   // });
 
-  let inputValue = ""
-
-  let valueArray = [];
 
   // Function to perform error checking
   function checkInput(input) {

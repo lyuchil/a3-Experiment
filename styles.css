@@ -75,3 +75,10 @@ button:hover {
     display: none;
     color: red;
 }
+
+#visualization-container {
+    width: 510px;
+    height: 510px;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+}
