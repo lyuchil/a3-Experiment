@@ -8,7 +8,7 @@
 
 This project presents an interactive experiment where users engage with 5 different types of charts, aiming to evaluate their perception of data visualizations. Participants are shown graphs with two points highlighted in red and asked to estimate what percent the smaller point represents of the larger one. Upon completing the quiz, participants receive their results, which they can opt to submit. This experiment was primarily developed using HTML, JavaScript, CSS, and leverages the Google Sheets API alongside Express for data collection. Though initially designed to record responses directly to Google Sheets, deployment constraints led us to adjust the functionality to display results at the quiz's end, hosted via GitHub Pages.
 
-![Experiment Screenshot](path/to/screenshot.png) <!-- Replace path/to/screenshot.png with the path to your screenshot -->
+![Experiment Screenshot](images/experiment.png) <!-- Replace path/to/screenshot.png with the path to your screenshot -->
 
 ## Technical Achievements
 
@@ -22,18 +22,18 @@ This project presents an interactive experiment where users engage with 5 differ
 - **Styling with Google Fonts**: Incorporated Google Fonts to improve readability and aesthetics, contributing to a more polished and professional appearance.
 - **Chart Varieties**:
   - **Horizontal Bar Chart**: Showcases comparisons among categories horizontally.  
-    ![Horizontal Bar Chart](path/to/horizontal_chart.png)
+    ![Horizontal Bar Chart](images/horizontal_bar.png)
   - **Vertical Bar Chart**: Facilitates understanding of category comparisons vertically.  
-    ![Vertical Bar Chart](path/to/vertical_chart.png)
+    ![Vertical Bar Chart](images/vertical_bar.png)
   - **Line Chart**: Illustrates trends or changes over intervals.  
-    ![Line Chart](path/to/line_chart.png)
+    ![Line Chart](images/line.png)
   - **Pie Chart**: Represents data in proportions within a circular graph.  
-    ![Pie Chart](path/to/pie_chart.png)
+    ![Pie Chart](images/pie.png)
   - **Tree Map**: Displays hierarchical data using nested rectangles.  
-    ![Tree Map](path/to/tree_map.png)
+    ![Tree Map](images/treemap.png)
 
 ## Data Analysis
 
 The collected data was analyzed to calculate the average log2Error across all visualization types and trials, further enriched with Bootstrapped 95% confidence intervals to provide a robust measure of participants' accuracy in interpreting the visualizations.
 
-![Error Values](path/to/error_values.png)
+![Error Values](images/error_values.png)
